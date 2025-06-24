@@ -1,6 +1,6 @@
 import re
 
-def parse_kv_blocks(
+def _parse_kv_blocks(
     rac_output,
     field_patterns,
     required_fields,
@@ -34,7 +34,7 @@ def parse_cluster(rac_output):
     """
     Разбирает вывод "rac cluster list" и возвращает список (uuid, name).
     """
-    return parse_kv_blocks(
+    return _parse_kv_blocks(
         rac_output,
         field_patterns=[
             ("uuid", r"^(?:cluster|uuid)\s*:\s*(\S+)"),
@@ -48,7 +48,7 @@ def parse_infobase(rac_output):
     """
     Разбирает вывод "rac infobase summary list" и возвращает (uuid, name, descr).
     """
-    return parse_kv_blocks(
+    return _parse_kv_blocks(
         rac_output,
         field_patterns=[
             ("uuid", r"^infobase\s*:\s*(\S+)"),
@@ -63,7 +63,7 @@ def parse_server(rac_output):
     """
     Разбирает вывод "rac server list ..." и возвращает [(uuid, name), ...].
     """
-    return parse_kv_blocks(
+    return _parse_kv_blocks(
         rac_output,
         field_patterns=[
             ("uuid", r"^(?:server|uuid)\s*:\s*(\S+)"),

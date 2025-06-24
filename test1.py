@@ -6,104 +6,19 @@ import getpass
 import platform
 import subprocess
 import os
-import re
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
-from config import PATH_RAC
+from .config import PATH_RAC
+from .rac.parser import *
 
 
 # ──────────────────────────────────────────────────────────────────────────────
 # ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 # ──────────────────────────────────────────────────────────────────────────────
 
-def parse_infobases(rac_output: str) -> List[Tuple[str, str, str]]:
-    """
-    Возвращает список кортежей (uuid, name, descr).
-    Значение descr может быть пустой строкой.
-    """
-    ibases: List[Tuple[str, str, str]] = []
-    uuid = name = descr = None
-
-    re_uuid  = re.compile(r"^infobase\s*:\s*(\S+)", re.I)
-    re_name  = re.compile(r"^name\s*:\s*\"?(.*?)\"?\s*$", re.I)
-    re_descr = re.compile(r"^descr\s*:\s*\"?(.*?)\"?\s*$", re.I)
-
-    for raw in rac_output.splitlines():
-        line = raw.strip()
-        if not line:
-            continue
-
-        if (m := re_uuid.match(line)):
-            uuid = m.group(1).strip()
-        elif (m := re_name.match(line)):
-            name = m.group(1).strip()
-        elif (m := re_descr.match(line)):
-            descr = m.group(1).strip()
-
-        # когда собрали все три поля — добавляем и обнуляем
-        if uuid and name is not None and descr is not None:
-            ibases.append((uuid, name, descr))
-            uuid = name = descr = None
-
-    return ibases
-
-def parse_clusters(rac_output: str) -> List[Tuple[str, str]]:
-    """
-    Разбирает вывод «rac cluster list» и возвращает
-    список (uuid, name), устойчивый к пробелам и кавычкам.
-    """
-    clusters: List[Tuple[str, str]] = []
-    uuid: Optional[str] = None
-    name: Optional[str] = None
-
-    re_uuid = re.compile(r"^(?:cluster|uuid)\s*:\s*(\S+)", re.I)
-    re_name = re.compile(r"^name\s*:\s*\"?(.*?)\"?\s*$", re.I)
-
-    for raw in rac_output.splitlines():
-        line = raw.strip()
-        if not line:
-            continue
-
-        if (m := re_uuid.match(line)):
-            uuid = m.group(1).strip()
-        elif (m := re_name.match(line)):
-            name = m.group(1).strip()
-
-        if uuid and name is not None:
-            clusters.append((uuid, name))
-            uuid = name = None
-
-    return clusters
-
 def show_process_list(out: str) -> None:
     print("\n===== Рабочие серверы / процессы =====\n")
     print(out or "Процессов не найдено.")
-
-def parse_servers(rac_output: str) -> List[Tuple[str, str]]:
-    """
-    Разбирает вывод «rac server list …» и возвращает [(uuid, name), …].
-    У 1С имя рабочего сервера выводится в поле 'name'.
-    """
-    servers: List[Tuple[str, str]] = []
-    uuid = name = None
-    re_uuid = re.compile(r"^(?:server|uuid)\s*:\s*(\S+)", re.I)
-    re_name = re.compile(r"^name\s*:\s*\"?(.*?)\"?\s*$", re.I)
-
-    for raw in rac_output.splitlines():
-        line = raw.strip()
-        if not line:
-            continue
-
-        if (m := re_uuid.match(line)):
-            uuid = m.group(1).strip()
-        elif (m := re_name.match(line)):
-            name = m.group(1).strip()
-
-        if uuid and name is not None:
-            servers.append((uuid, name))
-            uuid = name = None
-
-    return servers
 
 def collect_infobase_params() -> str:
     print("\nВведите параметры для создания информационной базы.")
@@ -214,7 +129,7 @@ def get_clusters_remote(
 ) -> List[Tuple[str, str]]:
     """Возвращает [(uuid, name), …] для удалённого сервера."""
     out, _ = _run_remote(ssh_client, sudo_pwd, "cluster list")
-    return parse_clusters(out)
+    return parse_cluster(out)
 
 
 def show_infobases_for_cluster_remote(
@@ -232,7 +147,7 @@ def show_infobases_for_cluster_remote(
         # сначала ошибки, чтобы их не «потерять»
         print("\n===== STDERR =====\n" + err)
 
-    infobases = parse_infobases(out)
+    infobases = parse_infobase(out)
 
     if not infobases:          # пункт 3: нет инфобаз
         print("\nИнформационные базы отсутствуют.\n")
@@ -267,7 +182,7 @@ def get_servers_remote(
 ) -> List[Tuple[str, str]]:
     """[(uuid, name), …] для выбранного кластера (удалённо)."""
     out, _ = _run_remote(ssh_client, sudo_pwd, f"server list --cluster={cluster_uuid}")
-    return parse_servers(out)
+    return parse_server(out)
 
 def show_server_info_remote(
     ssh_client: paramiko.SSHClient,
@@ -343,7 +258,7 @@ def drop_infobase_remote(ssh_client: paramiko.SSHClient, sudo_pwd: str):
     cluster_uuid = clusters[int(sel) - 1][0]
 
     out, _ = _run_remote(ssh_client, sudo_pwd, f"infobase summary list --cluster={cluster_uuid}")
-    infobases = parse_infobases(out)
+    infobases = parse_infobase(out)
     if not infobases:
         print("Инфобазы не найдены.")
         return
@@ -409,7 +324,7 @@ def get_clusters_local() -> List[Tuple[str, str]]:
     if not check_rac_exists():
         return []
     out, _ = _run_local("cluster list")
-    return parse_clusters(out)
+    return parse_cluster(out)
 
 
 def show_infobases_for_cluster_local(cluster_uuid: str) -> None:
@@ -422,7 +337,7 @@ def show_infobases_for_cluster_local(cluster_uuid: str) -> None:
     if err:
         print("\n===== STDERR =====\n" + err)
 
-    infobases = parse_infobases(out)
+    infobases = parse_infobase(out)
 
     if not infobases:
         print("\nИнформационные базы отсутствуют.\n")
@@ -449,7 +364,7 @@ def get_servers_local(cluster_uuid: str) -> List[Tuple[str, str]]:
     if not check_rac_exists():
         return []
     out, _ = _run_local(f"server list --cluster={cluster_uuid}")
-    return parse_servers(out)
+    return parse_server(out)
 
 def show_server_info_local(cluster_uuid: str, server_uuid: str) -> None:
     if not check_rac_exists():
@@ -523,7 +438,7 @@ def drop_infobase_local():
     cluster_uuid = clusters[int(sel) - 1][0]
 
     out, _ = _run_local(f"infobase summary list --cluster={cluster_uuid}")
-    infobases = parse_infobases(out)
+    infobases = parse_infobase(out)
     if not infobases:
         print("Инфобазы не найдены.")
         return
@@ -684,7 +599,7 @@ def remote_workflow() -> None:
 
             cluster_uuid = clusters[int(sel) - 1][0]
             out, _ = _run_remote(client, pwd, f"infobase summary list --cluster={cluster_uuid}")
-            infobases = parse_infobases(out)
+            infobases = parse_infobase(out)
             if not infobases:
                 print("Инфобазы не найдены.")
                 continue
@@ -839,7 +754,7 @@ def local_workflow() -> None:
 
             cluster_uuid = clusters[int(sel) - 1][0]
             out, _ = _run_local(f"infobase summary list --cluster={cluster_uuid}")
-            infobases = parse_infobases(out)
+            infobases = parse_infobase(out)
             if not infobases:
                 print("Инфобазы не найдены.")
                 continue
@@ -866,32 +781,3 @@ def local_workflow() -> None:
             break
         else:
             print("Некорректный ввод. Попробуйте снова.\n")
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# MAIN
-# ──────────────────────────────────────────────────────────────────────────────
-
-def main() -> None:
-    while True:
-        print(
-            "\n=== Выберите режим работы ===\n"
-            "  1 — Подключиться по SSH (удалённо)\n"
-            "  2 — Локально (на этой машине)\n"
-            "  0 — Выход"
-        )
-        mode = input("Ваш выбор: ").strip()
-
-        if mode == "1":
-            remote_workflow()
-        elif mode == "2":
-            local_workflow()
-        elif mode == "0":
-            print("До свидания!")
-            break
-        else:
-            print("Некорректный ввод. Попробуйте снова.\n")
-
-
-if __name__ == "__main__.py":
-    main()

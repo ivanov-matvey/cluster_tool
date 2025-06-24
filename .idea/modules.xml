@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/test_praktika.iml" filepath="$PROJECT_DIR$/.idea/test_praktika.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cluster_tool.iml" filepath="$PROJECT_DIR$/.idea/cluster_tool.iml" />
     </modules>
   </component>
 </project>
