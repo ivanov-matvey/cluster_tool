@@ -57,7 +57,6 @@ class BaseExecutor(ABC):
             field_patterns=[
                 ("uuid", r"^infobase\s*:\s*(\S+)"),
                 ("name", r"^name\s*:\s*\"?(.*?)\"?\s*$"),
-                ("descr", r"^descr\s*:\s*\"?(.*?)\"?\s*$"),
             ],
             required_fields=["uuid", "name", "descr"],
         )
