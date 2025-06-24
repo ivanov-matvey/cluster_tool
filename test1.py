@@ -9,7 +9,7 @@ import os
 import re
 from typing import List, Tuple, Optional
 
-PATH_RAC = "/opt/1cv8/x86_64/8.3.25.1286/rac"   # базовый путь к rac
+from config import PATH_RAC
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -893,5 +893,5 @@ def main() -> None:
             print("Некорректный ввод. Попробуйте снова.\n")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__.py":
     main()
