@@ -1,25 +1,33 @@
-from .test1 import remote_workflow, local_workflow
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from .app.workflow import remote_workflow, local_workflow
 
 
-def main() -> None:
+def main():
+    """Главная функция - точка входа в приложение."""
+    print("Добро пожаловать в утилиту управления 1С!")
+
     while True:
         print(
-            "\n=== Выберите режим работы ===\n"
-            "  1 — Подключиться по SSH (удалённо)\n"
-            "  2 — Локально (на этой машине)\n"
+            "\nВыберите режим работы:\n"
+            "  1 — Удалённо (через SSH)\n"
+            "  2 — Локально (на Astra Linux)\n"
             "  0 — Выход"
         )
-        mode = input("Ваш выбор: ").strip()
 
-        if mode == "1":
+        choice = input("Ваш выбор: ").strip()
+
+        if choice == "1":
             remote_workflow()
-        elif mode == "2":
+        elif choice == "2":
             local_workflow()
-        elif mode == "0":
+        elif choice == "0":
             print("До свидания!")
             break
         else:
-            print("Некорректный ввод. Попробуйте снова.\n")
+            print("Некорректный ввод. Попробуйте снова.")
+
 
 if __name__ == "__main__":
     main()
