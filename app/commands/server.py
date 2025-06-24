@@ -27,6 +27,5 @@ class ServerCommands:
             return
 
         server_uuid = server[0]
-        out, err = self.server_manager.get_server_info_raw(cluster_uuid,
-                                                           server_uuid)
+        out, err = self.server_manager.get_server_info_raw(cluster_uuid, server_uuid)
         print_output(out, err, "Информация о рабочем сервере")

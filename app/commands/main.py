@@ -5,6 +5,7 @@ from .cluster import ClusterCommands
 from .infobase import InfobaseCommands
 from .process import ProcessCommands
 from .server import ServerCommands
+from .session import SessionCommands
 
 
 class MainCommands:
@@ -15,11 +16,15 @@ class MainCommands:
         self.infobase_commands = InfobaseCommands(executor)
         self.process_commands = ProcessCommands(executor)
         self.server_commands = ServerCommands(executor)
+        self.session_commands = SessionCommands(executor)
 
     # Команды для кластеров
     def show_cluster_list(self):
         """Показывает полный вывод rac cluster list."""
         return self.cluster_commands.show_cluster_list()
+
+    def update_session_lifetime(self):
+        self.cluster_commands.update_session_lifetime()
 
     # Команды для инфобаз
     def show_infobases(self):
@@ -47,3 +52,13 @@ class MainCommands:
     def show_server_info(self):
         """Показывает информацию о рабочем сервере."""
         return self.server_commands.show_server_info()
+
+    # Команды для сеансов
+    def show_sessions(self):
+        self.session_commands.show_sessions()
+
+    def show_session_info(self, with_licenses=False):
+        self.session_commands.show_session_info(with_licenses)
+
+    def terminate_session(self):
+        self.session_commands.terminate_session()

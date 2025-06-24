@@ -80,11 +80,7 @@ def select_from_list(items, item_type="элемент"):
 
     print(f"\nВыберите {item_type}:")
     for i, item in enumerate(items, 1):
-        if len(item) == 2:  # (uuid, name)
-            print(f"  {i}) {item[1]} — {item[0]}")
-        elif len(item) == 3:  # (uuid, name, descr)
-            print(f"  {i}) {item[1]} — {item[0]}")
-            print(f"    descr: {item[2] or '<пусто>'}")
+        print(f"  {i}) {item[1]} — {item[0]}")  # (uuid, name)
 
     sel = input(f"\nНомер {item_type}а: ").strip()
     if not sel.isdigit() or not (1 <= int(sel) <= len(items)):

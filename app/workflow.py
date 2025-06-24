@@ -62,25 +62,41 @@ def _run_menu(commands, mode_name, ras_host=""):
             "  5 — Получить информацию об инфобазе\n"
             "  6 — Создать информационную базу\n"
             "  7 — Удалить информационную базу\n"
+            "  8 — Показать список сеансов\n"
+            "  9 — Информация о сеансах\n"
+            "  10 — Информация лицензиях сеансов\n"
+            "  11 — Обновить период перезапуска рабочих сеансов\n"
+            "  12 — Завершить сессию\n"
             "  0 — Назад"
         )
         choice = input("Ваш выбор: ").strip()
 
-        if choice == "1":
-            commands.show_cluster_list()
-        elif choice == "2":
-            commands.show_infobases()
-        elif choice == "3":
-            commands.show_processes()
-        elif choice == "4":
-            commands.show_server_info()
-        elif choice == "5":
-            commands.show_infobase_info(ras_host)
-        elif choice == "6":
-            commands.create_infobase()
-        elif choice == "7":
-            commands.drop_infobase()
-        elif choice == "0":
-            break
-        else:
-            print("Некорректный ввод. Попробуйте снова.\n")
+        match choice:
+            case "1":
+                commands.show_cluster_list()
+            case "2":
+                commands.show_infobases()
+            case "3":
+                commands.show_processes()
+            case "4":
+                commands.show_server_info()
+            case "5":
+                commands.show_infobase_info(ras_host)
+            case "6":
+                commands.create_infobase()
+            case "7":
+                commands.drop_infobase()
+            case "8":
+                commands.show_sessions()
+            case "9":
+                commands.show_session_info()
+            case "10":
+                commands.show_session_info(with_licenses=True)
+            case "11":
+                commands.update_session_lifetime()
+            case "12":
+                commands.terminate_session()
+            case "0":
+                break
+            case _:
+                print("Некорректный ввод. Попробуйте снова.\n")
