@@ -44,7 +44,7 @@ class InfobaseManager:
         """Возвращает сырую информацию об инфобазе."""
         ras_address = f"{ras_host}:{DEFAULT_RAS_PORT}" if ras_host else ""
         out, err = self.executor.run_command(
-            f"infobase summary info --cluster={cluster_uuid} --infobase={infobase_uuid}",
+            f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid}",
             ras_address=ras_address
         )
         return out, err
