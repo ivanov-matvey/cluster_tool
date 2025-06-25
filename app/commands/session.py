@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from ..managers.cluster import ClusterManager
 from ..managers.session import SessionManager
 from ..ui.common import select_from_list, print_output
@@ -8,63 +11,71 @@ class SessionCommands:
 
     def __init__(self, executor):
         self.session_manager = SessionManager(executor)
+        self.cluster_manager = ClusterManager(executor)
 
     def show_session_list(self):
-        """Показывает список сессий."""
-        cluster_manager = ClusterManager(self.session_manager.executor)
-        clusters = cluster_manager.get_clusters()
-        cluster = select_from_list(clusters, "кластер")
+        """Получает сырой список сеансов и вызывает их вывод."""
+        clusters = self.cluster_manager.get_cluster_list_parsed()
+        cluster = select_from_list(clusters, "cluster")
         if not cluster:
             return
 
         cluster_uuid = cluster[0]
-        sessions = self.session_manager.list_sessions(cluster_uuid)
+        out, err = self.session_manager.get_session_list(cluster_uuid)
+        print_output(out, err, "Список сеансов")
 
-        if not sessions:
-            print("\nНет активных сессий.")
-            return
 
-        print("\n===== Сессии =====\n")
-        for i, (uuid, user, host, app_id) in enumerate(sessions, 1):
-            print(f"{i}) {user} — {uuid}")
-            print(f"    Хост: {host or 'n/a'}  Приложение: {app_id or 'n/a'}")
-
-    def show_session_info(self, with_licenses=False):
-        """Показывает подробную информацию о сессии."""
-        cluster_manager = ClusterManager(self.session_manager.executor)
-        clusters = cluster_manager.get_clusters()
-        cluster = select_from_list(clusters, "кластер")
+    def show_session_info(self):
+        """Получает информацию о сеансе и вызывает ее вывод."""
+        clusters = self.cluster_manager.get_cluster_list_parsed()
+        cluster = select_from_list(clusters, "cluster")
         if not cluster:
             return
 
         cluster_uuid = cluster[0]
-        sessions = self.session_manager.list_sessions(cluster_uuid)
-        session = select_from_list(sessions, "сессию")
+        sessions = self.session_manager.get_session_list_parsed(cluster_uuid)
+        session = select_from_list(sessions, "session")
         if not session:
             return
 
         session_uuid = session[0]
         out, err = self.session_manager.get_session_info(
-            cluster_uuid, session_uuid, licenses=with_licenses
+            cluster_uuid, session_uuid
         )
-        if out.strip() == "":
-            out = "Нет лицензий.\n"
-        print_output(out, err, "Информация о сессии")
+        print_output(out, err, "Информация о сеансе")
 
-    def delete_session(self):
-        """Завершает выбранную сессию."""
-        cluster_manager = ClusterManager(self.session_manager.executor)
-        clusters = cluster_manager.get_clusters()
-        cluster = select_from_list(clusters, "кластер")
+    def show_session_licenses_info(self):
+        """Получает информацию о лицензиях сеанса и вызывает ее вывод."""
+        clusters = self.cluster_manager.get_cluster_list_parsed()
+        cluster = select_from_list(clusters, "cluster")
         if not cluster:
             return
 
         cluster_uuid = cluster[0]
-        sessions = self.session_manager.list_sessions(cluster_uuid)
-        session = select_from_list(sessions, "сессию")
+        sessions = self.session_manager.get_session_list_parsed(cluster_uuid)
+        session = select_from_list(sessions, "session")
         if not session:
             return
 
         session_uuid = session[0]
-        out, err = self.session_manager.terminate_session(cluster_uuid, session_uuid)
-        print_output(out, err, "Завершение сессии")
+        out, err = self.session_manager.get_session_licenses_info(
+            cluster_uuid, session_uuid
+        )
+        print_output(out, err, "Информация о лицензиях сеанса")
+
+    def delete_session(self):
+        """Завершает сеанс."""
+        clusters = self.cluster_manager.get_cluster_list_parsed()
+        cluster = select_from_list(clusters, "cluster")
+        if not cluster:
+            return
+
+        cluster_uuid = cluster[0]
+        sessions = self.session_manager.get_session_list_parsed(cluster_uuid)
+        session = select_from_list(sessions, "session")
+        if not session:
+            return
+
+        session_uuid = session[0]
+        out, err = self.session_manager.delete_session(cluster_uuid, session_uuid)
+        print_output(out, err, "Завершение сеанса")

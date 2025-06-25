@@ -53,19 +53,20 @@ def local_workflow():
 def _run_menu(commands, mode_name, ras_host=""):
     """Запускает интерактивное меню."""
     actions = (
-        "Показать список кластеров",
-        "Показать список информационных баз",
-        "Показать список рабочих процессов",
-        "Показать информацию о рабочем сервере",
-        "Показать информацию об информационной базе",
+        "Список кластеров",
+        "Список информационных баз",
+        "Список рабочих процессов",
+        "Список серверов",
+        "Список сеансов",
+        "Информация об информационной базе",
+        "Информация о сервере",
+        "Информация о сеансе",
+        "Информация о лицензиях сеансов",
         "Создать информационную базу",
-        "Удалить информационную базу"
-        "Показать список сеансов",
-        "Информация о сеансах",
-        "Информация лицензиях сеансов",
+        "Удалить информационную базу",
         "Обновить период перезапуска рабочих сеансов",
         "Завершить сеанс",
-        "Назад"
+        "Назад",
     )
 
     while True:
@@ -80,22 +81,24 @@ def _run_menu(commands, mode_name, ras_host=""):
             case "3":
                 commands.show_process_list()
             case "4":
-                commands.show_server_info()
+                commands.show_server_list()
             case "5":
-                commands.show_infobase_info(ras_host)
-            case "6":
-                commands.create_infobase()
-            case "7":
-                commands.delete_infobase()
-            case "8":
                 commands.show_session_list()
-            case "9":
+            case "6":
+                commands.show_infobase_info(ras_host)
+            case "7":
+                commands.show_server_info()
+            case "8":
                 commands.show_session_info()
+            case "9":
+                commands.show_session_licenses_info()
             case "10":
-                commands.show_session_info(with_licenses=True)
+                commands.create_infobase()
             case "11":
-                commands.update_session_lifetime()
+                commands.delete_infobase()
             case "12":
+                commands.update_session_lifetime()
+            case "13":
                 commands.delete_session()
             case "0":
                 break

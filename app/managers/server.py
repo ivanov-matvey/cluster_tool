@@ -8,14 +8,20 @@ class ServerManager:
     def __init__(self, executor):
         self.executor = executor
 
-    def get_servers(self, cluster_uuid):
-        """Возвращает список серверов для кластера [(uuid, name), ...]."""
+    def get_server_list_parsed(self, cluster_uuid):
+        """Возвращает сырой список серверов."""
         out, _ = self.executor.run_command(
             f"server list --cluster={cluster_uuid}")
         return self.executor.parse_server(out)
 
-    def get_server_info_raw(self, cluster_uuid, server_uuid):
-        """Возвращает сырую информацию о сервере."""
+    def get_server_list(self, cluster_uuid):
+        """Возвращает сырой список серверов."""
+        out, err = self.executor.run_command(
+            f"server list --cluster={cluster_uuid}")
+        return out, err
+
+    def get_server_info(self, cluster_uuid, server_uuid):
+        """Возвращает информацию о сервере."""
         out, err = self.executor.run_command(
             f"server info --cluster={cluster_uuid} --server={server_uuid}"
         )

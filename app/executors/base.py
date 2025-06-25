@@ -85,7 +85,7 @@ class BaseExecutor(ABC):
             required_fields=["uuid", "name"],
         )
 
-    def parse_sessions(self, rac_output):
+    def parse_session(self, rac_output):
         """Разбирает вывод session list и возвращает [(uuid, user-name, host, app_id), ...]."""
         return self.parse_kv_blocks(
             rac_output,

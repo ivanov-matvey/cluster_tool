@@ -4,7 +4,7 @@ from ..config import DEFAULT_RAS_PORT
 
 
 def _build_create_args(params):
-    """Строит аргументы для создания инфобазы."""
+    """Строит аргументы для создания информационной базы."""
     args = [
         "infobase create",
         "--create-database",
@@ -29,19 +29,27 @@ def _build_create_args(params):
 
 
 class InfobaseManager:
-    """Бизнес-логика для работы с инфобазами."""
+    """Бизнес-логика для работы с информационными базами."""
 
     def __init__(self, executor):
         self.executor = executor
 
-    def get_infobases(self, cluster_uuid):
-        """Возвращает список инфобаз для кластера [(uuid, name, descr), ...]."""
+    def get_infobase_list_parsed(self, cluster_uuid):
+        """Возвращает обработанный список информационных баз."""
         out, _ = self.executor.run_command(
-            f"infobase summary list --cluster={cluster_uuid}")
+            f"infobase summary list --cluster={cluster_uuid}"
+        )
         return self.executor.parse_infobase(out)
 
-    def get_infobase_info_raw(self, cluster_uuid, infobase_uuid, ras_host=""):
-        """Возвращает сырую информацию об инфобазе."""
+    def get_infobase_list(self, cluster_uuid):
+        """Возвращает сырой список информационных баз."""
+        out, err = self.executor.run_command(
+            f"infobase summary list --cluster={cluster_uuid}"
+        )
+        return out, err
+
+    def get_infobase_info(self, cluster_uuid, infobase_uuid, ras_host=""):
+        """Возвращает сырую информацию об информационной базе."""
         ras_address = f"{ras_host}:{DEFAULT_RAS_PORT}" if ras_host else ""
         out, err = self.executor.run_command(
             f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid}",
@@ -50,14 +58,15 @@ class InfobaseManager:
         return out, err
 
     def create_infobase(self, cluster_uuid, params):
-        """Создает инфобазу с заданными параметрами."""
+        """Создает информационную базу с заданными параметрами."""
         args = _build_create_args(params)
         out, err = self.executor.run_command(
-            f"{args} --cluster={cluster_uuid}")
+            f"{args} --cluster={cluster_uuid}"
+        )
         return out, err
 
     def drop_infobase(self, cluster_uuid, infobase_uuid, extra_flags=None):
-        """Удаляет инфобазу."""
+        """Удаляет информационную базу."""
         if extra_flags is None:
             extra_flags = []
 

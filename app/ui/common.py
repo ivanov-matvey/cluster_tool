@@ -5,6 +5,40 @@ import getpass
 from ..config import TITLE_LENGTH
 
 
+ITEM_TYPES = {
+    "cluster": {
+        "nom": "кластер",    # кто? что?
+        "acc": "кластер",    # кого? что?
+        "gen": "кластера",   # кого? чего?
+        "plural": "кластеры"
+    },
+    "infobase": {
+        "nom": "инфобаза",
+        "acc": "инфобазу",
+        "gen": "инфобазы",
+        "plural": "инфобазы"
+    },
+    "process": {
+        "nom": "процесс",
+        "acc": "процесс",
+        "gen": "процесса",
+        "plural": "процессы"
+    },
+    "server": {
+        "nom": "сервер",
+        "acc": "сервер",
+        "gen": "сервера",
+        "plural": "сервера"
+    },
+    "session": {
+        "nom": "сеанс",
+        "acc": "сеанс",
+        "gen": "сеанса",
+        "plural": "сеансы"
+    }
+}
+
+
 def get_ssh_credentials():
     """Собирает данные для SSH-подключения."""
     print_center_text("Подключение к серверу 1С по SSH", TITLE_LENGTH)
@@ -19,7 +53,7 @@ def get_ssh_credentials():
     return host, user, pwd
 
 
-def collect_infobase_params():
+def collect_create_infobase_params():
     """Собирает параметры для создания информационной базы."""
     print("\nВведите параметры для создания информационной базы.")
     print("Пример заполнения:\n"
@@ -53,7 +87,7 @@ def collect_infobase_params():
     }
 
 
-def collect_drop_params():
+def collect_delete_infobase_params():
     """Собирает параметры для удаления информационной базы."""
     print("\nВведите параметры для удаления информационной базы.")
     print("Пример:\n"
@@ -74,47 +108,30 @@ def collect_drop_params():
     return extra_args
 
 
-def select_from_list(items, item_type="элемент"):
+def select_from_list(items, item_type_key="cluster"):
     """Универсальная функция выбора элемента из списка."""
+    item_type = ITEM_TYPES.get(item_type_key)
+
     if not items:
-        print(f"{item_type.capitalize()}ы не найдены.")
+        print_error(f"{item_type["plural"]} не найдены.")
         return None
 
-    print(f"\nВыберите {item_type}:")
-    for i, item in enumerate(items, 1):
-        print(f"  {i}) {item[1]} — {item[0]}")  # (uuid, name)
+    print_list(f"Выберите {item_type["acc"]}", items)
 
-    sel = input(f"\nНомер {item_type}а: ").strip()
-    if not sel.isdigit() or not (1 <= int(sel) <= len(items)):
-        print("Неверный выбор.")
+    choice = get_number(f"\nВыберите {item_type["acc"]}")
+    if not 1 <= int(choice) <= len(items):
+        print_error("Некорректный ввод.")
         return None
 
-    return items[int(sel) - 1]
+    return items[int(choice) - 1]
 
 
 def print_output(out, err, title="Результат"):
     """Выводит stdout и stderr с заголовком."""
-    print(f"\n===== {title} =====\n")
+    print_center_text(title, TITLE_LENGTH)
     print(out or "<пустой вывод>")
     if err:
-        print("\n===== STDERR =====\n" + err)
-
-
-def print_infobases(infobases):
-    """Выводит список информационных баз."""
-    if not infobases:
-        print("\nИнформационные базы отсутствуют.\n")
-        return
-
-    print("\n===== Информационные базы =====\n")
-    for i, (uuid, name) in enumerate(infobases, 1):
-        print(f"{i}) {name} — {uuid}")
-
-
-def print_process_list(out):
-    """Выводит список процессов."""
-    print("\n===== Рабочие серверы / процессы =====\n")
-    print(out or "Процессов не найдено.")
+        print_error(err)
 
 
 def print_error(message):
@@ -133,7 +150,7 @@ def print_info(message):
 
 
 def print_center_text(text, length):
-    """Выводит текст по центру с '-' по краям."""
+    """Выводит текст по центру с '─' по краям."""
     if length <= len(text):
         print(text)
         return
@@ -146,10 +163,15 @@ def print_center_text(text, length):
 
 
 def print_list(title, items):
-    """Выводит нумерованный список."""
-    print(f"{title}:")
+    print(f"\n{title}:")
     for i, item in enumerate(items, 1):
-        print(f"  [ {i} ] {item}")
+        if isinstance(item, tuple):
+            head = item[0]
+            tail = " - ".join(str(x) for x in item[1:])
+            print(f"[ {i} ] {head} - {tail}" if tail else f"[ {i} ] {head}")
+        else:
+            print(f"[ {i} ] {item}")
+
 
 
 def get_number(title):
