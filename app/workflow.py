@@ -8,7 +8,7 @@ from .executors.local import LocalExecutor
 from .executors.remote import RemoteExecutor
 from .commands.main import MainCommands
 from .ui.common import get_ssh_credentials, print_error, print_success, \
-    print_info, print_list, get_value
+    print_info, print_list, get_number
 
 
 def remote_workflow():
@@ -55,7 +55,7 @@ def _run_menu(commands, mode_name, ras_host=""):
     actions = (
         "Показать список кластеров",
         "Показать список информационных баз",
-        "Показать рабочие процессы",
+        "Показать список рабочих процессов",
         "Показать информацию о рабочем сервере",
         "Показать информацию об информационной базе",
         "Создать информационную базу",
@@ -70,15 +70,15 @@ def _run_menu(commands, mode_name, ras_host=""):
 
     while True:
         print_list(f"Меню ({mode_name} режим)", actions)
-        choice = get_value("Ваш выбор")
+        choice = get_number("Ваш выбор")
 
         match choice:
             case "1":
                 commands.show_cluster_list()
             case "2":
-                commands.show_infobases()
+                commands.show_infobase_list()
             case "3":
-                commands.show_processes()
+                commands.show_process_list()
             case "4":
                 commands.show_server_info()
             case "5":
@@ -86,9 +86,9 @@ def _run_menu(commands, mode_name, ras_host=""):
             case "6":
                 commands.create_infobase()
             case "7":
-                commands.drop_infobase()
+                commands.delete_infobase()
             case "8":
-                commands.show_sessions()
+                commands.show_session_list()
             case "9":
                 commands.show_session_info()
             case "10":
@@ -96,7 +96,7 @@ def _run_menu(commands, mode_name, ras_host=""):
             case "11":
                 commands.update_session_lifetime()
             case "12":
-                commands.terminate_session()
+                commands.delete_session()
             case "0":
                 break
             case _:

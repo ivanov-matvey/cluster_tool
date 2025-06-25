@@ -9,7 +9,7 @@ from .session import SessionCommands
 
 
 class MainCommands:
-    """Главный класс, объединяющий все команды."""
+    """Главный класс. Объединяет все команды."""
 
     def __init__(self, executor):
         self.cluster_commands = ClusterCommands(executor)
@@ -20,45 +20,63 @@ class MainCommands:
 
     # Команды для кластеров
     def show_cluster_list(self):
-        """Показывает полный вывод rac cluster list."""
+        """Показывает список кластеров."""
         return self.cluster_commands.show_cluster_list()
 
     def update_session_lifetime(self):
+        """Обновляет период перезапуска рабочих сеансов."""
         self.cluster_commands.update_session_lifetime()
 
+
     # Команды для инфобаз
-    def show_infobases(self):
-        """Показывает информационные базы для выбранного кластера."""
-        return self.infobase_commands.show_infobases()
+    def show_infobase_list(self):
+        """Показывает список информационных баз для выбранного кластера."""
+        return self.infobase_commands.show_infobase_list()
 
     def show_infobase_info(self, ras_host=""):
-        """Показывает информацию об инфобазе."""
+        """Показывает полную информацию об информационной базе."""
         return self.infobase_commands.show_infobase_info(ras_host)
 
     def create_infobase(self):
         """Создает информационную базу."""
         return self.infobase_commands.create_infobase()
 
-    def drop_infobase(self):
+    def delete_infobase(self):
         """Удаляет информационную базу."""
-        return self.infobase_commands.drop_infobase()
+        return self.infobase_commands.delete_infobase()
+
 
     # Команды для процессов
-    def show_processes(self):
-        """Показывает процессы для выбранного кластера."""
-        return self.process_commands.show_processes()
+    def show_process_list(self):
+        """Показывает полную информацию о процессах для выбранного кластера."""
+        return self.process_commands.show_process_list()
+
+    def show_process_info(self):
+        """Показывает полную информацию о процессе."""
+        # TODO: Реализовать функцию
+        pass
+
 
     # Команды для серверов
+    def show_server_list(self):
+        """Показывает список серверов для выбранного кластера"""
+        # TODO: Реализовать функцию
+        pass
+
     def show_server_info(self):
-        """Показывает информацию о рабочем сервере."""
+        """Показывает полную информацию о рабочем сервере."""
         return self.server_commands.show_server_info()
 
+
     # Команды для сеансов
-    def show_sessions(self):
-        self.session_commands.show_sessions()
+    def show_session_list(self):
+        """Показывает список сеансов для выбранного кластера."""
+        self.session_commands.show_session_list()
 
     def show_session_info(self, with_licenses=False):
+        """Показывает полную информацию о сеансе."""
         self.session_commands.show_session_info(with_licenses)
 
-    def terminate_session(self):
-        self.session_commands.terminate_session()
+    def delete_session(self):
+        """Удаляет сеанс."""
+        self.session_commands.delete_session()

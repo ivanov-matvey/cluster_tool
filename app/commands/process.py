@@ -12,7 +12,7 @@ class ProcessCommands:
     def __init__(self, executor):
         self.process_manager = ProcessManager(executor)
 
-    def show_processes(self):
+    def show_process_list(self):
         """Показывает процессы для выбранного кластера."""
         cluster_manager = ClusterManager(self.process_manager.executor)
         clusters = cluster_manager.get_clusters()

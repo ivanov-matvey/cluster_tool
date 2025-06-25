@@ -107,9 +107,8 @@ def print_infobases(infobases):
         return
 
     print("\n===== Информационные базы =====\n")
-    for i, (uuid, name, descr) in enumerate(infobases, 1):
+    for i, (uuid, name) in enumerate(infobases, 1):
         print(f"{i}) {name} — {uuid}")
-        print(f"    descr: {descr or '<пусто>'}")
 
 
 def print_process_list(out):
@@ -119,19 +118,22 @@ def print_process_list(out):
 
 
 def print_error(message):
+    """Выводит сообщение об ошибке."""
     print(f"\n> (x) {message}\n")
 
 
 def print_success(message):
+    """Выводит сообщение об успехе."""
     print(f"\n> (+) {message}\n")
 
 
 def print_info(message):
+    """Выводит информационное сообщение."""
     print(f"\n> (i) {message}\n")
 
 
 def print_center_text(text, length):
-    """Выводит текст по центру с '-' по краям"""
+    """Выводит текст по центру с '-' по краям."""
     if length <= len(text):
         print(text)
         return
@@ -144,10 +146,12 @@ def print_center_text(text, length):
 
 
 def print_list(title, items):
+    """Выводит нумерованный список."""
     print(f"{title}:")
     for i, item in enumerate(items, 1):
         print(f"  [ {i} ] {item}")
 
 
-def get_value(title):
+def get_number(title):
+    """Получает от пользователя число и возвращает его."""
     return input(f"{title}: ").strip()

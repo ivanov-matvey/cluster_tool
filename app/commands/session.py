@@ -9,7 +9,7 @@ class SessionCommands:
     def __init__(self, executor):
         self.session_manager = SessionManager(executor)
 
-    def show_sessions(self):
+    def show_session_list(self):
         """Показывает список сессий."""
         cluster_manager = ClusterManager(self.session_manager.executor)
         clusters = cluster_manager.get_clusters()
@@ -51,7 +51,7 @@ class SessionCommands:
             out = "Нет лицензий.\n"
         print_output(out, err, "Информация о сессии")
 
-    def terminate_session(self):
+    def delete_session(self):
         """Завершает выбранную сессию."""
         cluster_manager = ClusterManager(self.session_manager.executor)
         clusters = cluster_manager.get_clusters()

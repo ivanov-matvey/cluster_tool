@@ -13,7 +13,7 @@ class InfobaseCommands:
     def __init__(self, executor):
         self.infobase_manager = InfobaseManager(executor)
 
-    def show_infobases(self):
+    def show_infobase_list(self):
         """Показывает информационные базы для выбранного кластера."""
         cluster_manager = ClusterManager(self.infobase_manager.executor)
         clusters = cluster_manager.get_clusters()
@@ -58,7 +58,7 @@ class InfobaseCommands:
         out, err = self.infobase_manager.create_infobase(cluster_uuid, params)
         print_output(out, err, "Создание инфобазы")
 
-    def drop_infobase(self):
+    def delete_infobase(self):
         """Удаляет информационную базу."""
         cluster_manager = ClusterManager(self.infobase_manager.executor)
         clusters = cluster_manager.get_clusters()
