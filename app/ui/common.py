@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import getpass
 
+from ..config import TITLE_LENGTH
+
 
 def get_ssh_credentials():
     """Собирает данные для SSH-подключения."""
-    print("\n*** Подключение к серверу 1С по SSH ***\n")
+    print_center_text("Подключение к серверу 1С по SSH", TITLE_LENGTH)
     host = input("IP-адрес сервера: ").strip()
     user = input("Имя пользователя (логин): ").strip()
 
@@ -114,3 +116,38 @@ def print_process_list(out):
     """Выводит список процессов."""
     print("\n===== Рабочие серверы / процессы =====\n")
     print(out or "Процессов не найдено.")
+
+
+def print_error(message):
+    print(f"\n> (x) {message}\n")
+
+
+def print_success(message):
+    print(f"\n> (+) {message}\n")
+
+
+def print_info(message):
+    print(f"\n> (i) {message}\n")
+
+
+def print_center_text(text, length):
+    """Выводит текст по центру с '-' по краям"""
+    if length <= len(text):
+        print(text)
+        return
+
+    total_dashes = length - len(text)
+    left_dashes = total_dashes // 2
+    right_dashes = total_dashes - left_dashes
+
+    print(f"\n{"─" * left_dashes} {text} {"─" * right_dashes}")
+
+
+def print_list(title, items):
+    print(f"{title}:")
+    for i, item in enumerate(items, 1):
+        print(f"  [ {i} ] {item}")
+
+
+def get_value(title):
+    return input(f"{title}: ").strip()

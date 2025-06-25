@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+from .app.config import TITLE_LENGTH
+from .app.ui.common import print_center_text, print_list
 from .app.workflow import remote_workflow, local_workflow
 
 
 def main():
-    """Главная функция - точка входа в приложение."""
-    print("Добро пожаловать в утилиту управления 1С!")
+    """Главное меню."""
+    print_center_text("Добро пожаловать в утилиту управления 1С", TITLE_LENGTH)
+
+    actions = (
+        "Удалённо (через SSH)",
+        "Локально (на Astra Linux)",
+        "Выход",
+    )
 
     while True:
-        print(
-            "\nВыберите режим работы:\n"
-            "  1 — Удалённо (через SSH)\n"
-            "  2 — Локально (на Astra Linux)\n"
-            "  0 — Выход"
-        )
+        print_list("Выберите режим работы", actions)
 
         choice = input("Ваш выбор: ").strip()
 
@@ -23,7 +25,7 @@ def main():
         elif choice == "2":
             local_workflow()
         elif choice == "0":
-            print("До свидания!")
+            print("\nПриложение остановлено.")
             break
         else:
             print("Некорректный ввод. Попробуйте снова.")
