@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import platform
 import paramiko
-import sys
-import os
 import platform
 
 
@@ -12,7 +9,8 @@ from .executors.local import LocalExecutor
 from .executors.remote import RemoteExecutor
 from .commands.main import MainCommands
 from .ui.common import get_ssh_credentials, print_error, print_success, \
-    print_info, print_list, get_number
+    print_info
+from .ui.arrow_menu import menu_with_arrows
 
 
 def remote_workflow():
@@ -54,75 +52,6 @@ def local_workflow():
     _run_menu(commands, "локальный")
 
 
-if platform.system() == "Windows":
-    import msvcrt
-else:
-    import tty
-    import termios
-
-def clear_screen():
-    os.system("cls" if platform.system() == "Windows" else "clear")
-
-if platform.system() == "Windows":
-    import msvcrt
-else:
-    import tty
-    import termios
-    import select
-
-def get_key():
-    if platform.system() == "Windows":
-        key = msvcrt.getch()
-        if key == b'\xe0':
-            key = msvcrt.getch()
-            return key
-        return key
-    else:
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setcbreak(fd)
-            rlist, _, _ = select.select([fd], [], [], 0.1)
-            if rlist:
-                first_char = sys.stdin.read(1)
-                if first_char == '\x1b':
-                    next_two = sys.stdin.read(2)
-                    return first_char + next_two
-                else:
-                    return first_char
-            else:
-                return None  # клавиша не нажата
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-
-def menu_with_arrows(title, options):
-    selected = 0
-    while True:
-        clear_screen()
-        print(f"{title}\n")
-        for i, option in enumerate(options):
-            prefix = "➤ " if i == selected else "  "
-            print(f"{prefix}{option}")
-        print("\n(Навигация: стрелки ↑↓, Enter — выбрать)")
-
-        key = get_key()
-
-        if platform.system() == "Windows":
-            if key == b'H':  # стрелка вверх
-                selected = (selected - 1) % len(options)
-            elif key == b'P':  # стрелка вниз
-                selected = (selected + 1) % len(options)
-            elif key == b'\r':  # Enter
-                return selected
-        else:
-            if key == '\x1b[A':  # стрелка вверх
-                selected = (selected - 1) % len(options)
-            elif key == '\x1b[B':  # стрелка вниз
-                selected = (selected + 1) % len(options)
-            elif key == '\n':  # Enter
-                return selected
-
-
 def _run_menu(commands, mode_name, ras_host=""):
     """Запускает интерактивное меню с управлением стрелками и Enter."""
     actions = (
@@ -145,7 +74,6 @@ def _run_menu(commands, mode_name, ras_host=""):
     while True:
         choice = menu_with_arrows(f"Меню ({mode_name} режим)", actions)
 
-        # По индексу вызываем методы команд (замена match с строками на индексы)
         if choice == 0:
             commands.show_cluster_list()
         elif choice == 1:
@@ -173,7 +101,7 @@ def _run_menu(commands, mode_name, ras_host=""):
         elif choice == 12:
             commands.delete_session()
         elif choice == 13:
-            break  # Выход из меню
+            break
 
         print("\nНажмите Enter для возврата в меню...")
         input()
