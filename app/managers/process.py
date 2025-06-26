@@ -3,7 +3,7 @@
 
 
 class ProcessManager:
-    """Бизнес-логика для работы с процессами."""
+    """Реализация работы с процессами."""
 
     def __init__(self, executor):
         self.executor = executor

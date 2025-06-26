@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..config import DEFAULT_RAS_PORT
 
 
 def _build_create_args(params):
@@ -29,7 +28,7 @@ def _build_create_args(params):
 
 
 class InfobaseManager:
-    """Бизнес-логика для работы с информационными базами."""
+    """Реализация работы с информационными базами."""
 
     def __init__(self, executor):
         self.executor = executor

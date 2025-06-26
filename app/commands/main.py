@@ -6,7 +6,19 @@ from .infobase import InfobaseCommands
 from .process import ProcessCommands
 from .server import ServerCommands
 from .session import SessionCommands
+from .admin import AdminCommands
 from ..ui.common import menu_with_arrows_multiple
+
+
+def test_menu():
+    options = [
+        ("1", "Пункт первый"),
+        ("2", "Пункт второй"),
+        ("3", "Пункт третий"),
+        ("4", "Пункт четвертый"),
+        ("5", "Пункт пятый"),
+    ]
+    menu_with_arrows_multiple("Выберите пункт", options)
 
 
 class MainCommands:
@@ -18,6 +30,7 @@ class MainCommands:
         self.process_commands = ProcessCommands(executor)
         self.server_commands = ServerCommands(executor)
         self.session_commands = SessionCommands(executor)
+        self.admin_commands = AdminCommands()
 
     # Команды для кластеров
     def show_cluster_list(self):
@@ -80,12 +93,13 @@ class MainCommands:
         """Удаляет сеанс."""
         self.session_commands.delete_session()
 
-    def test_menu(self):
-        options = [
-            ("1", "Пункт первый"),
-            ("2", "Пункт второй"),
-            ("3", "Пункт третий"),
-            ("4", "Пункт четвертый"),
-            ("5", "Пункт пятый"),
-        ]
-        menu_with_arrows_multiple("Выберите пункт", options)
+
+    # Команды для администратора серверов
+    def show_admin_information(self):
+        """Выводит информацию об администраторе кластеров."""
+        self.admin_commands.show_admin_information()
+
+    def update_admin_information(self):
+        """Обновляет информацию об администраторе кластеров."""
+        self.admin_commands.update_admin_information()
+

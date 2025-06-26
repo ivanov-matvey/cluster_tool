@@ -6,8 +6,6 @@ import platform
 import sys
 import os
 
-from ..config import TITLE_LENGTH
-
 ITEM_TYPES = {
     "cluster": {
         "nom": "кластер",    # кто? что?
@@ -45,9 +43,10 @@ ITEM_TYPES = {
 def print_output(out, err, title="Результат"):
     """Выводит stdout и stderr с заголовком."""
     print_center_text(title)
-    print(out or "<пустой вывод>")
     if err:
         print_error(err)
+        return
+    print(out or "<пустой вывод>")
 
 
 def print_error(message):
@@ -67,11 +66,12 @@ def print_info(message):
 
 def print_center_text(text):
     """Выводит текст по центру с '-' по краям."""
-    if TITLE_LENGTH <= len(text):
+    title_length = 80
+    if title_length <= len(text):
         print(text)
         return
 
-    total_dashes = TITLE_LENGTH - len(text)
+    total_dashes = title_length - len(text)
     left_dashes = total_dashes // 2
     right_dashes = total_dashes - left_dashes
 
@@ -90,8 +90,31 @@ def print_list(title, items):
 
 
 def get_number(title):
-    """Получает от пользователя число и возвращает его."""
-    return input(f"{title}: ").strip()
+    """Получает от пользователя число и возвращает его как int."""
+    while True:
+        val = input(f"{title}: ").strip()
+        if val.isdigit():
+            return int(val)
+        else:
+            print("Ошибка: введите целое число.")
+
+def get_string(title):
+    """Получает от пользователя непустую строку."""
+    while True:
+        val = input(f"{title}: ").strip()
+        if val:
+            return val
+        else:
+            print("Ошибка: строка не может быть пустой.")
+
+def get_password(title):
+    """Получает от пользователя пароль без отображения на экране."""
+    while True:
+        val = getpass.getpass(f"{title}: ").strip()
+        if val:
+            return val
+        else:
+            print("Ошибка: пароль не может быть пустым.")
 
 
 def get_ssh_credentials():
@@ -150,8 +173,6 @@ def collect_create_infobase_params():
     }
 
 
-
-
 def collect_delete_infobase_params():
     """Собирает параметры для удаления информационной базы."""
     print("\nВведите параметры для удаления информационной базы.")
@@ -171,6 +192,10 @@ def collect_delete_infobase_params():
         extra_args.append("--clear-database")
 
     return extra_args
+
+
+def collect_update_admin_params():
+    """Собирает параметры для обновления администратора кластеров."""
 
 
 def select_from_list(items, item_type_key="cluster"):
