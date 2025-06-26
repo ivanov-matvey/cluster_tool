@@ -69,7 +69,6 @@ def collect_create_infobase_params():
         print("Выход в главное меню.")
         return None
 
-
     print("\nВведите параметры для создания информационной базы.")
     print("Пример заполнения:\n"
           "  Имя ИБ:           MyBase\n"
