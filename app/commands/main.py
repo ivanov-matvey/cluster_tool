@@ -10,17 +10,6 @@ from .admin import AdminCommands
 from ..ui.common import menu_with_arrows_multiple
 
 
-def test_menu():
-    options = [
-        ("1", "Пункт первый"),
-        ("2", "Пункт второй"),
-        ("3", "Пункт третий"),
-        ("4", "Пункт четвертый"),
-        ("5", "Пункт пятый"),
-    ]
-    menu_with_arrows_multiple("Выберите пункт", options)
-
-
 class MainCommands:
     """Главный класс. Объединяет все команды."""
 
@@ -103,3 +92,14 @@ class MainCommands:
         """Обновляет информацию об администраторе кластеров."""
         self.admin_commands.update_admin_information()
 
+
+    # Тестовое меню с множественным выбором
+    def test_menu(self):
+        options = [
+            ("1", "Пункт первый"),
+            ("2", "Пункт второй"),
+            ("3", "Пункт третий"),
+            ("4", "Пункт четвертый"),
+            ("5", "Пункт пятый"),
+        ]
+        menu_with_arrows_multiple("Выберите пункт", options)

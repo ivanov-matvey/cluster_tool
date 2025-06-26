@@ -72,6 +72,13 @@ class InfobaseCommands:
 
         infobase_uuid = infobase[0]
         extra_flags = collect_delete_infobase_params()
+
+        if not extra_flags:
+            print("\nОперация удаления отменена пользователем.")
+            return
+        else:
+            print("\nУдаление информационной базы, ожидайте.")
+
         out, err = self.infobase_manager.drop_infobase(cluster_uuid,
                                                        infobase_uuid,
                                                        extra_flags)

@@ -24,6 +24,12 @@ class ClusterCommands:
         if not cluster:
             return
 
+        confirm = input(
+            "Вы действительно хотите изменить период перезапуска рабочих сеансов? (yes/no): ").strip().lower()
+        if confirm != "yes":
+            print("Операция обновления отменена пользователем.")
+            return
+
         lifetime = get_number("Введите период перезапуска рабочих сеансов (мин)")
 
         cluster_uuid = cluster[0]
