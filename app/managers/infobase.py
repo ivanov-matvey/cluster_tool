@@ -59,7 +59,7 @@ class InfobaseManager:
         """Создает информационную базу с заданными параметрами."""
         if params is None:
             print("Создание информационной базы отменено.")
-            return None, None  # или выбросить исключение, если нужно
+            return None, None
 
         args = _build_create_args(params)
         out, err = self.executor.run_command(

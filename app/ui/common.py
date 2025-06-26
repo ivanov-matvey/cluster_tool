@@ -153,16 +153,25 @@ def collect_create_infobase_params():
 
 
 def collect_delete_infobase_params():
-    """Собирает параметры для удаления информационной базы."""
+    """Собирает параметры для удаления информационной базы с возможностью выйти до ввода."""
+
+    # Сначала спрашиваем, уверен ли пользователь
+    choice = menu_with_arrows(
+        "Вы выбрали удаление информационной базы. Продолжить?",
+        ["Продолжить", "Назад"]
+    )
+
+    if choice == 1:
+        print("Возврат в главное меню.")
+        return None
+
     print("\nВведите параметры для удаления информационной базы.")
     print("Пример:\n"
           "  Удалить БД (yes/no): yes\n"
           "  Очистить БД (yes/no): no\n")
 
-    drop_db = input(
-        "Удалить базу данных (--drop-database)? (yes/no): ").strip().lower()
-    clear_db = input(
-        "Очистить базу данных (--clear-database)? (yes/no): ").strip().lower()
+    drop_db = input("Удалить базу данных (--drop-database)? (yes/no): ").strip().lower()
+    clear_db = input("Очистить базу данных (--clear-database)? (yes/no): ").strip().lower()
 
     extra_args = []
     if drop_db == "yes":
@@ -171,6 +180,7 @@ def collect_delete_infobase_params():
         extra_args.append("--clear-database")
 
     return extra_args
+
 
 
 def select_from_list(items, item_type_key="cluster"):

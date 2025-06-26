@@ -17,11 +17,17 @@ class ClusterCommands:
         print_output(out, err, "Список кластеров")
 
     def update_session_lifetime(self):
-        """Обновляет период перезапуска рабочих сеансов
-        и вызывает вывод обновленной информации."""
+        """Обновляет период перезапуска рабочих сеансов и вызывает вывод обновленной информации."""
+
         clusters = self.manager.get_cluster_list_parsed()
         cluster = select_from_list(clusters, "cluster")
         if not cluster:
+            return
+
+        confirm = input(
+            "Вы действительно хотите изменить период перезапуска рабочих сеансов? (yes/no): ").strip().lower()
+        if confirm != "yes":
+            print("Операция обновления отменена пользователем.")
             return
 
         lifetime = get_number("Введите период перезапуска рабочих сеансов (мин)")
@@ -30,3 +36,4 @@ class ClusterCommands:
         err = self.manager.update_session_lifetime(cluster_uuid, lifetime)
         out = self.manager.get_cluster(cluster_uuid)
         print_output(out, err, "Обновление периода перезапуска рабочих сеансов")
+
