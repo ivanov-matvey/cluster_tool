@@ -6,6 +6,7 @@ from .infobase import InfobaseCommands
 from .process import ProcessCommands
 from .server import ServerCommands
 from .session import SessionCommands
+from ..ui.arrow_menu import menu_with_arrows_multiple
 
 
 class MainCommands:
@@ -78,3 +79,13 @@ class MainCommands:
     def delete_session(self):
         """Удаляет сеанс."""
         self.session_commands.delete_session()
+
+    def test_menu(self):
+        options = [
+            ("1", "Пункт первый"),
+            ("2", "Пункт второй"),
+            ("3", "Пункт третий"),
+            ("4", "Пункт четвертый"),
+            ("5", "Пункт пятый"),
+        ]
+        menu_with_arrows_multiple("Выберите пункт", options)

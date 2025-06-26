@@ -68,6 +68,7 @@ def _run_menu(commands, mode_name, ras_host=""):
         "Удалить информационную базу",
         "Обновить период перезапуска рабочих сеансов",
         "Завершить сеанс",
+        "Тест множественный выбор",
         "Назад",
     )
 
@@ -101,6 +102,8 @@ def _run_menu(commands, mode_name, ras_host=""):
         elif choice == 12:
             commands.delete_session()
         elif choice == 13:
+            commands.test_menu()
+        elif choice == 14:
             break
 
         print("\nНажмите Enter для возврата в меню...")
