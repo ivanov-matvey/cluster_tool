@@ -67,6 +67,8 @@ def _run_menu(commands, mode_name):
         "Удалить информационную базу",
         "Обновить период перезапуска рабочих сеансов",
         "Завершить сеанс",
+        "Информация об аккаунте администратора кластеров",
+        "Обновить аккаунт администратора кластеров",
         "Тест множественный выбор",
         "Назад",
     )
@@ -74,36 +76,43 @@ def _run_menu(commands, mode_name):
     while True:
         choice = menu_with_arrows(f"Меню ({mode_name} режим", actions)
 
-        if choice == 0:
-            commands.show_cluster_list()
-        elif choice == 1:
-            commands.show_infobase_list()
-        elif choice == 2:
-            commands.show_process_list()
-        elif choice == 3:
-            commands.show_server_list()
-        elif choice == 4:
-            commands.show_session_list()
-        elif choice == 5:
-            commands.show_infobase_info()
-        elif choice == 6:
-            commands.show_server_info()
-        elif choice == 7:
-            commands.show_session_info()
-        elif choice == 8:
-            commands.show_session_licenses_info()
-        elif choice == 9:
-            commands.create_infobase()
-        elif choice == 10:
-            commands.delete_infobase()
-        elif choice == 11:
-            commands.update_session_lifetime()
-        elif choice == 12:
-            commands.delete_session()
-        elif choice == 13:
-            commands.test_menu()
-        elif choice == 14:
-            break
+        match choice:
+            case 0:
+                commands.show_cluster_list()
+            case 1:
+                commands.show_infobase_list()
+            case 2:
+                commands.show_process_list()
+            case 3:
+                commands.show_server_list()
+            case 4:
+                commands.show_session_list()
+            case 5:
+                commands.show_infobase_info()
+            case 6:
+                commands.show_server_info()
+            case 7:
+                commands.show_session_info()
+            case 8:
+                commands.show_session_licenses_info()
+            case 9:
+                commands.create_infobase()
+            case 10:
+                commands.delete_infobase()
+            case 11:
+                commands.update_session_lifetime()
+            case 12:
+                commands.delete_session()
+            case 13:
+                commands.show_admin_information()
+            case 14:
+                commands.update_admin_information()
+            case 15:
+                commands.test_menu()
+            case 16:
+                break
+            case "cansel":
+                break
 
         print("\nНажмите Enter для возврата в меню...")
         input()

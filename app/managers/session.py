@@ -1,5 +1,5 @@
 class SessionManager:
-    """Бизнес-логика для работы с сессиями."""
+    """Реализация работы с сессиями."""
 
     def __init__(self, executor):
         self.executor = executor

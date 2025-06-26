@@ -3,7 +3,7 @@
 
 
 class ClusterManager:
-    """Бизнес-логика для работы с кластерами."""
+    """Реализация работы с кластерами."""
 
     def __init__(self, executor):
         self.executor = executor

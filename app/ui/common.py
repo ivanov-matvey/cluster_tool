@@ -6,8 +6,6 @@ import platform
 import sys
 import os
 
-from ..config import TITLE_LENGTH
-
 ITEM_TYPES = {
     "cluster": {
         "nom": "кластер",    # кто? что?
@@ -45,9 +43,10 @@ ITEM_TYPES = {
 def print_output(out, err, title="Результат"):
     """Выводит stdout и stderr с заголовком."""
     print_center_text(title)
-    print(out or "<пустой вывод>")
     if err:
         print_error(err)
+        return
+    print(out or "<пустой вывод>")
 
 
 def print_error(message):
@@ -67,11 +66,12 @@ def print_info(message):
 
 def print_center_text(text):
     """Выводит текст по центру с '-' по краям."""
-    if TITLE_LENGTH <= len(text):
+    title_length = 80
+    if title_length <= len(text):
         print(text)
         return
 
-    total_dashes = TITLE_LENGTH - len(text)
+    total_dashes = title_length - len(text)
     left_dashes = total_dashes // 2
     right_dashes = total_dashes - left_dashes
 
@@ -90,8 +90,31 @@ def print_list(title, items):
 
 
 def get_number(title):
-    """Получает от пользователя число и возвращает его."""
-    return input(f"{title}: ").strip()
+    """Получает от пользователя число и возвращает его как int."""
+    while True:
+        val = input(f"{title}: ").strip()
+        if val.isdigit():
+            return int(val)
+        else:
+            print("Ошибка: введите целое число.")
+
+def get_string(title):
+    """Получает от пользователя непустую строку."""
+    while True:
+        val = input(f"{title}: ").strip()
+        if val:
+            return val
+        else:
+            print("Ошибка: строка не может быть пустой.")
+
+def get_password(title):
+    """Получает от пользователя пароль без отображения на экране."""
+    while True:
+        val = getpass.getpass(f"{title}: ").strip()
+        if val:
+            return val
+        else:
+            print("Ошибка: пароль не может быть пустым.")
 
 
 def get_ssh_credentials():
@@ -150,8 +173,6 @@ def collect_create_infobase_params():
     }
 
 
-
-
 def collect_delete_infobase_params():
     """Собирает параметры для удаления информационной базы с возможностью выйти до ввода."""
 
@@ -182,6 +203,12 @@ def collect_delete_infobase_params():
     return extra_args
 
 
+<<<<<<< HEAD
+=======
+def collect_update_admin_params():
+    """Собирает параметры для обновления администратора кластеров."""
+
+>>>>>>> dbabced88d21c3860f3aaf9cdc253c2dd885464f
 
 def select_from_list(items, item_type_key="cluster"):
     """Универсальная функция выбора элемента из списка с навигацией стрелками."""
@@ -195,6 +222,8 @@ def select_from_list(items, item_type_key="cluster"):
     options = [f"{i+1}. {item}" for i, item in enumerate(items)]
 
     choice = menu_with_arrows(f"Выберите {item_type['acc']}", options)
+    if choice == "cancel":
+        return None
 
     return items[choice]
 
@@ -245,7 +274,7 @@ def menu_with_arrows(title, options):
         for i, option in enumerate(options):
             prefix = "➤" if i == selected else " "
             print(f"{prefix} {option}")
-        print("\n(Навигация: стрелки ↑↓, Enter — выбрать)")
+        print("\n(Навигация: стрелки ↑↓, Enter — выбрать, Backspace — назад)")
 
         key = _get_key()
 
@@ -255,6 +284,8 @@ def menu_with_arrows(title, options):
             selected = (selected + 1) % len(options)
         elif key in {'\n', b'\r'}:  # Enter
             return selected
+        elif key in {b'\x08', b'\x7f', '\x08', '\x7f'}:  # Backspace
+            return "cancel"
 
 
 def menu_with_arrows_multiple(title, options):
@@ -267,7 +298,7 @@ def menu_with_arrows_multiple(title, options):
             prefix = "➤" if i == selected else " "
             is_selected = "[*]" if i in selected_list else "[ ]"
             print(f"{prefix} {is_selected} {option}")
-        print("\n(Навигация: стрелки ↑↓, Пробел — выбрать, Enter — подтвердить выбор)")
+        print("\n(Навигация: стрелки ↑↓, Пробел — выбрать, Enter — подтвердить выбор, Backspace — назад)")
 
         key = _get_key()
 
@@ -282,3 +313,5 @@ def menu_with_arrows_multiple(title, options):
         elif key in {'\n', b'\r'}:  # Enter
             print(f"Выбраны пункты: {selected_list}")
             return selected_list
+        elif key in {b'\x08', b'\x7f', '\x08', '\x7f'}:  # Backspace
+            return "cancel"

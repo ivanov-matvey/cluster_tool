@@ -3,7 +3,7 @@
 
 
 class ServerManager:
-    """Бизнес-логика для работы с серверами."""
+    """Реализация работы с серверами."""
 
     def __init__(self, executor):
         self.executor = executor
