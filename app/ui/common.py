@@ -58,7 +58,17 @@ def get_ssh_credentials():
 
 
 def collect_create_infobase_params():
-    """Собирает параметры для создания информационной базы."""
+    """Собирает параметры для создания информационной базы с меню выбора."""
+
+    choice = menu_with_arrows(
+        "Вы перешли в режим создания информационной базы. Что хотите сделать?",
+        ["Продолжить создание", "Назад"]
+    )
+
+    if choice == 1:
+        print("Выход в главное меню.")
+        return None
+
     print("\nВведите параметры для создания информационной базы.")
     print("Пример заполнения:\n"
           "  Имя ИБ:           MyBase\n"
@@ -82,13 +92,12 @@ def collect_create_infobase_params():
         'db_user': input("Пользователь БД (--db-user): ").strip(),
         'db_pwd': input("Пароль БД (--db-pwd): ").strip(),
         'descr': input("Описание (--descr): ").strip(),
-        'date_offset': input(
-            "Смещение даты (--date-offset, опционально): ").strip(),
-        'sec_level': input(
-            "Уровень безопасности (--security-level, опционально): ").strip(),
-        'sched_deny': input(
-            "Блокировка регл. заданий on|off (--scheduled-jobs-deny): ").strip()
+        'date_offset': input("Смещение даты (--date-offset, опционально): ").strip(),
+        'sec_level': input("Уровень безопасности (--security-level, опционально): ").strip(),
+        'sched_deny': input("Блокировка регл. заданий on|off (--scheduled-jobs-deny): ").strip()
     }
+
+
 
 
 def collect_delete_infobase_params():

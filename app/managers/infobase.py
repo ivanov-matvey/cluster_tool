@@ -59,6 +59,10 @@ class InfobaseManager:
 
     def create_infobase(self, cluster_uuid, params):
         """Создает информационную базу с заданными параметрами."""
+        if params is None:
+            print("Создание информационной базы отменено.")
+            return None, None  # или выбросить исключение, если нужно
+
         args = _build_create_args(params)
         out, err = self.executor.run_command(
             f"{args} --cluster={cluster_uuid}"
