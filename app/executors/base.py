@@ -9,7 +9,7 @@ class BaseExecutor(ABC):
     """Базовый класс для исполнителей команд rac."""
 
     @abstractmethod
-    def run_command(self, rac_args, ras_address=""):
+    def run_command(self, rac_args):
         """Выполняет команду rac и возвращает (stdout, stderr)."""
         pass
 

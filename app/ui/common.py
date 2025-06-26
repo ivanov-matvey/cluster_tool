@@ -111,12 +111,11 @@ def get_ssh_credentials():
 def collect_create_infobase_params():
     """Собирает параметры для создания информационной базы с меню выбора."""
 
-    print_center_text("Вы перешли в режим создания информационной базы. Что хотите сделать?")
     options = [
         "Продолжить создание",
         "Назад"
     ]
-    choice = menu_with_arrows(options)
+    choice = menu_with_arrows("Вы перешли в режим создания информационной базы. Что хотите сделать?", options)
 
     if choice == 1:
         print("Выход в главное меню.")

@@ -41,9 +41,7 @@ class InfobaseCommands:
             return
 
         infobase_uuid = infobase[0]
-        out, err = self.infobase_manager.get_infobase_info(cluster_uuid,
-                                                           infobase_uuid,
-                                                           ras_host)
+        out, err = self.infobase_manager.get_infobase_info(cluster_uuid, infobase_uuid)
         print_output(out, err, "Информация об информационной базе")
 
 

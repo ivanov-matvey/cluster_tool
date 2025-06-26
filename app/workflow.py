@@ -31,7 +31,7 @@ def remote_workflow():
     commands = MainCommands(executor)
 
     try:
-        _run_menu(commands, "удалённый", host)
+        _run_menu(commands, "удалённый")
     finally:
         client.close()
         print_info("Соединение закрыто")
@@ -51,7 +51,7 @@ def local_workflow():
     _run_menu(commands, "локальный")
 
 
-def _run_menu(commands, mode_name, ras_host=""):
+def _run_menu(commands, mode_name):
     """Запускает интерактивное меню с управлением стрелками и Enter."""
     actions = (
         "Список кластеров",
@@ -85,7 +85,7 @@ def _run_menu(commands, mode_name, ras_host=""):
         elif choice == 4:
             commands.show_session_list()
         elif choice == 5:
-            commands.show_infobase_info(ras_host)
+            commands.show_infobase_info()
         elif choice == 6:
             commands.show_server_info()
         elif choice == 7:

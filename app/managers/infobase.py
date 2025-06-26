@@ -48,12 +48,10 @@ class InfobaseManager:
         )
         return out, err
 
-    def get_infobase_info(self, cluster_uuid, infobase_uuid, ras_host=""):
+    def get_infobase_info(self, cluster_uuid, infobase_uuid):
         """Возвращает сырую информацию об информационной базе."""
-        ras_address = f"{ras_host}:{DEFAULT_RAS_PORT}" if ras_host else ""
         out, err = self.executor.run_command(
-            f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid}",
-            ras_address=ras_address
+            f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid}"
         )
         return out, err
 
