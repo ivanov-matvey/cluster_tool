@@ -6,7 +6,7 @@ from .infobase import InfobaseCommands
 from .process import ProcessCommands
 from .server import ServerCommands
 from .session import SessionCommands
-from ..ui.arrow_menu import menu_with_arrows_multiple
+from ..ui.common import menu_with_arrows_multiple
 
 
 class MainCommands:

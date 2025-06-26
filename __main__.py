@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-from .app.ui.arrow_menu import menu_with_arrows
+from .app.ui.common import print_center_text, menu_with_arrows
 from .app.workflow import remote_workflow, local_workflow
 
 

@@ -9,8 +9,7 @@ from .executors.local import LocalExecutor
 from .executors.remote import RemoteExecutor
 from .commands.main import MainCommands
 from .ui.common import get_ssh_credentials, print_error, print_success, \
-    print_info
-from .ui.arrow_menu import menu_with_arrows
+    print_info, menu_with_arrows
 
 
 def remote_workflow():
@@ -73,7 +72,7 @@ def _run_menu(commands, mode_name, ras_host=""):
     )
 
     while True:
-        choice = menu_with_arrows(f"Меню ({mode_name} режим)", actions)
+        choice = menu_with_arrows(f"Меню ({mode_name} режим", actions)
 
         if choice == 0:
             commands.show_cluster_list()
