@@ -133,12 +133,11 @@ def get_ssh_credentials():
 
 def collect_create_infobase_params():
     """Собирает параметры для создания информационной базы с меню выбора."""
-
     options = [
         "Продолжить создание",
         "Назад"
     ]
-    choice = menu_with_arrows("Вы перешли в режим создания информационной базы. Что хотите сделать?", options)
+    choice = menu_with_arrows("Вы перешли в режим создания информационной базы. Продолжить?", options)
 
     if choice == 1:
         print("Выход в главное меню.")
@@ -174,41 +173,26 @@ def collect_create_infobase_params():
 
 
 def collect_delete_infobase_params():
-    """Собирает параметры для удаления информационной базы с возможностью выйти до ввода."""
-
-    # Сначала спрашиваем, уверен ли пользователь
-    choice = menu_with_arrows(
-        "Вы выбрали удаление информационной базы. Продолжить?",
-        ["Продолжить", "Назад"]
-    )
-
-    if choice == 1:
-        print("Возврат в главное меню.")
-        return None
-
+    """Собирает параметры для удаления информационной базы."""
     print("\nВведите параметры для удаления информационной базы.")
-    print("Пример:\n"
-          "  Удалить БД (yes/no): yes\n"
-          "  Очистить БД (yes/no): no\n")
 
-    drop_db = input("Удалить базу данных (--drop-database)? (yes/no): ").strip().lower()
-    clear_db = input("Очистить базу данных (--clear-database)? (yes/no): ").strip().lower()
+    drop_db = input(
+        "Удалить базу данных (--drop-database)? (y/n): ").strip().lower()
+    clear_db = input(
+        "Очистить базу данных (--clear-database)? (y/n): ").strip().lower()
 
     extra_args = []
-    if drop_db == "yes":
+    if drop_db in {"y", "Y"}:
         extra_args.append("--drop-database")
-    if clear_db == "yes":
+    if clear_db in {"y", "Y"}:
         extra_args.append("--clear-database")
 
     return extra_args
 
 
-<<<<<<< HEAD
-=======
 def collect_update_admin_params():
     """Собирает параметры для обновления администратора кластеров."""
 
->>>>>>> dbabced88d21c3860f3aaf9cdc253c2dd885464f
 
 def select_from_list(items, item_type_key="cluster"):
     """Универсальная функция выбора элемента из списка с навигацией стрелками."""

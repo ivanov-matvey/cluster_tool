@@ -59,7 +59,6 @@ class InfobaseCommands:
 
     def delete_infobase(self):
         """Удаляет информационную базу и вызывает вывод результата."""
-
         clusters = self.cluster_manager.get_cluster_list_parsed()
         cluster = select_from_list(clusters, "cluster")
         if not cluster:
@@ -74,12 +73,13 @@ class InfobaseCommands:
         infobase_uuid = infobase[0]
         extra_flags = collect_delete_infobase_params()
 
-        print("\nУдаление информационной базы:")
-        if extra_flags is None:
-            print("Операция удаления отменена пользователем.")
+        if not extra_flags:
+            print("\nОперация удаления отменена пользователем.")
             return
+        else:
+            print("\nУдаление информационной базы, ожидайте.")
 
-        out, err = self.infobase_manager.drop_infobase(
-            cluster_uuid, infobase_uuid, extra_flags
-        )
+        out, err = self.infobase_manager.drop_infobase(cluster_uuid,
+                                                       infobase_uuid,
+                                                       extra_flags)
         print_output(out, err, "Удаление информационной базы")
