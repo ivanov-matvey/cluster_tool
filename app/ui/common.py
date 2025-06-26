@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 import getpass
 
-import sys
-import os
-import platform
-
 from ..config import TITLE_LENGTH
-
+from .arrow_menu import menu_with_arrows
 
 ITEM_TYPES = {
     "cluster": {
@@ -112,75 +109,6 @@ def collect_delete_infobase_params():
     return extra_args
 
 
-
-if platform.system() == "Windows":
-    import msvcrt
-else:
-    import tty
-    import termios
-
-def clear_screen():
-    os.system("cls" if platform.system() == "Windows" else "clear")
-
-if platform.system() == "Windows":
-    import msvcrt
-else:
-    import tty
-    import termios
-    import select
-
-def get_key():
-    if platform.system() == "Windows":
-        key = msvcrt.getch()
-        if key == b'\xe0':
-            key = msvcrt.getch()
-            return key
-        return key
-    else:
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setcbreak(fd)
-            rlist, _, _ = select.select([fd], [], [], 0.1)
-            if rlist:
-                first_char = sys.stdin.read(1)
-                if first_char == '\x1b':
-                    next_two = sys.stdin.read(2)
-                    return first_char + next_two
-                else:
-                    return first_char
-            else:
-                return None
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-
-def menu_with_arrows(title, options):
-    selected = 0
-    while True:
-        clear_screen()
-        print(f"{title}\n")
-        for i, option in enumerate(options):
-            prefix = "➤ " if i == selected else "  "
-            print(f"{prefix}{option}")
-        print("\n(Навигация: стрелки ↑↓, Enter — выбрать)")
-
-        key = get_key()
-
-        if platform.system() == "Windows":
-            if key == b'H':  # стрелка вверх
-                selected = (selected - 1) % len(options)
-            elif key == b'P':  # стрелка вниз
-                selected = (selected + 1) % len(options)
-            elif key == b'\r':  # Enter
-                return selected
-        else:
-            if key == '\x1b[A':  # стрелка вверх
-                selected = (selected - 1) % len(options)
-            elif key == '\x1b[B':  # стрелка вниз
-                selected = (selected + 1) % len(options)
-            elif key == '\n':  # Enter
-                return selected
-
 def select_from_list(items, item_type_key="cluster"):
     """Универсальная функция выбора элемента из списка с навигацией стрелками."""
 
@@ -190,13 +118,10 @@ def select_from_list(items, item_type_key="cluster"):
         print_error(f"{item_type['plural']} не найдены.")
         return None
 
-    # Формируем список строк для вывода с индексами (например, для читаемости)
     options = [f"{i+1}. {item}" for i, item in enumerate(items)]
 
     choice = menu_with_arrows(f"Выберите {item_type['acc']}", options)
-    # choice — индекс выбранного элемента
 
-    # Проверка не нужна, т.к. menu_with_arrows не выходит за границы
     return items[choice]
 
 
