@@ -22,6 +22,8 @@ def main():
             case 2:
                 print("\nПриложение остановлено.")
                 break
+            case "cansel":
+                break
 
 
 if __name__ == "__main__":

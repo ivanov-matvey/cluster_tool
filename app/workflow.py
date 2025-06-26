@@ -111,6 +111,8 @@ def _run_menu(commands, mode_name):
                 commands.test_menu()
             case 16:
                 break
+            case "cansel":
+                break
 
         print("\nНажмите Enter для возврата в меню...")
         input()
