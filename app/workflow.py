@@ -70,6 +70,7 @@ def _run_menu(commands, mode_name):
         "Информация об аккаунте администратора кластеров",
         "Обновить аккаунт администратора кластеров",
         "Тест множественный выбор",
+        "Топ по сессиям",
         "Назад",
     )
 
@@ -110,6 +111,8 @@ def _run_menu(commands, mode_name):
             case 15:
                 commands.test_menu()
             case 16:
+                commands.show_session_top()
+            case 17:
                 break
             case "cansel":
                 break
