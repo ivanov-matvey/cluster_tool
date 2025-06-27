@@ -9,3 +9,4 @@ CREDENTIALS_FILE = os.path.join(BASE_DIR, "admin_credentials.json")
 KEY_FILE = os.path.join(BASE_DIR, "secret.key")
 
 PATH_RAC = "/opt/1cv8/x86_64/8.3.25.1286/rac"
+PATH_1C = "/opt/1cv8/x86_64"

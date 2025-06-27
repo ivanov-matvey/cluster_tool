@@ -107,6 +107,7 @@ def get_string(title):
         else:
             print("Ошибка: строка не может быть пустой.")
 
+
 def get_password(title):
     """Получает от пользователя пароль без отображения на экране."""
     while True:
