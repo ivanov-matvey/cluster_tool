@@ -82,6 +82,10 @@ class MainCommands:
         """Удаляет сеанс."""
         self.session_commands.delete_session()
 
+    def show_session_top(self):
+        """Показывает топ кластеров по количеству сессий."""
+        self.session_commands.show_session_top()
+
 
     # Команды для администратора серверов
     def show_admin_information(self):
