@@ -306,7 +306,7 @@ def menu_with_arrows_multiple(title, options):
         elif (key in {'\x20', b' '}) and (selected in selected_list):  # Пробел (снять выделение)
             selected_list.remove(selected)
         elif key in {'\n', b'\r'}:  # Enter
-            print(f"Выбраны пункты: {selected_list}")
+            print(f"Выбраны пункты: {[i + 1 for i in selected_list]}")
             return selected_list
         elif key in {b'\x08', b'\x7f', '\x08', '\x7f'}:  # Backspace
             return "cancel"
