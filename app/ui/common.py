@@ -203,7 +203,7 @@ def select_from_list(items, item_type_key="cluster"):
         print_error(f"{item_type['plural']} не найдены.")
         return None
 
-    options = [f"{i+1}. {item}" for i, item in enumerate(items)]
+    options = [(str(i + 1), *item) for i, item in enumerate(items)]
 
     choice = menu_with_arrows(f"Выберите {item_type['acc']}", options)
     if choice == "cancel":
@@ -257,7 +257,12 @@ def menu_with_arrows(title, options):
         print_center_text(title)
         for i, option in enumerate(options):
             prefix = "➤" if i == selected else " "
-            print(f"{prefix} {option}")
+            if isinstance(option, (list, tuple)):
+                first, *rest = option
+                rest_str = " — ".join(map(str, rest))
+                print(f"{prefix} {first}. {rest_str}")
+            else:
+                print(f"{prefix} {option}")
         print("\n(Навигация: стрелки ↑↓, Enter — выбрать, Backspace — назад)")
 
         key = _get_key()
@@ -281,7 +286,12 @@ def menu_with_arrows_multiple(title, options):
         for i, option in enumerate(options):
             prefix = "➤" if i == selected else " "
             is_selected = "[*]" if i in selected_list else "[ ]"
-            print(f"{prefix} {is_selected} {option}")
+            if isinstance(option, (list, tuple)):
+                first, *rest = option
+                rest_str = " — ".join(map(str, rest))
+                print(f"{prefix} {is_selected} {first}. {rest_str}")
+            else:
+                print(f"{prefix} {is_selected} {option}")
         print("\n(Навигация: стрелки ↑↓, Пробел — выбрать, Enter — подтвердить выбор, Backspace — назад)")
 
         key = _get_key()
