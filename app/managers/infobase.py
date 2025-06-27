@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from .admin import AdminManager
 
 
 def _build_create_args(params):
@@ -32,25 +33,29 @@ class InfobaseManager:
 
     def __init__(self, executor):
         self.executor = executor
+        admin_manager = AdminManager()
+        user, pwd = admin_manager.get_admin_information()
+        print(user, pwd)
+        self.auth_string = f"--cluster-user={user} --cluster-pwd={pwd}"
 
     def get_infobase_list_parsed(self, cluster_uuid):
         """Возвращает обработанный список информационных баз."""
         out, _ = self.executor.run_command(
-            f"infobase summary list --cluster={cluster_uuid}"
+            f"infobase summary list --cluster={cluster_uuid} {self.auth_string}"
         )
         return self.executor.parse_infobase(out)
 
     def get_infobase_list(self, cluster_uuid):
         """Возвращает сырой список информационных баз."""
         out, err = self.executor.run_command(
-            f"infobase summary list --cluster={cluster_uuid}"
+            f"infobase summary list --cluster={cluster_uuid} {self.auth_string}"
         )
         return out, err
 
     def get_infobase_info(self, cluster_uuid, infobase_uuid):
         """Возвращает сырую информацию об информационной базе."""
         out, err = self.executor.run_command(
-            f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid}"
+            f"infobase info --cluster={cluster_uuid} --infobase={infobase_uuid} {self.auth_string}"
         )
         return out, err
 
@@ -62,7 +67,7 @@ class InfobaseManager:
 
         args = _build_create_args(params)
         out, err = self.executor.run_command(
-            f"{args} --cluster={cluster_uuid}"
+            f"{args} --cluster={cluster_uuid} {self.auth_string}"
         )
         return out, err
 
@@ -71,6 +76,7 @@ class InfobaseManager:
         if extra_flags is None:
             extra_flags = []
 
-        args = [f"infobase drop --cluster={cluster_uuid} --infobase={infobase_uuid}"] + extra_flags
+        args = ([f"infobase drop --cluster={cluster_uuid} --infobase={infobase_uuid} {self.auth_string}"]
+                + extra_flags)
         out, err = self.executor.run_command(" ".join(args))
         return out, err

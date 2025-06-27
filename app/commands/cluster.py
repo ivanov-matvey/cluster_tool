@@ -25,8 +25,8 @@ class ClusterCommands:
             return
 
         confirm = input(
-            "Вы действительно хотите изменить период перезапуска рабочих сеансов? (yes/no): ").strip().lower()
-        if confirm != "yes":
+            "Вы действительно хотите изменить период перезапуска рабочих сеансов? (y/n): ").strip().lower()
+        if confirm not in {"y", "Y"}:
             print("Операция обновления отменена пользователем.")
             return
 
