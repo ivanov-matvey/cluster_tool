@@ -13,6 +13,7 @@ class RemoteExecutor(BaseExecutor):
         self.ssh_client = ssh_client
         self.sudo_pwd = sudo_pwd
         self._rac_path = None
+        self.version = self._get_latest_1c_version()
 
     def _get_latest_1c_version(self):
         """Получает последнюю версию 1С из удалённой директории."""
@@ -58,6 +59,9 @@ class RemoteExecutor(BaseExecutor):
             latest_version = self._get_latest_1c_version()
             self._rac_path = f"{PATH_1C}/{latest_version}/rac"
         return self._rac_path
+
+    def get_rac_version(self):
+        return self.version
 
     def run_command(self, rac_args, ras_address=""):
         """Выполняет удалённую команду rac через SSH и возвращает (stdout, stderr)."""

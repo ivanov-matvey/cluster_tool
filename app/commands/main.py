@@ -20,6 +20,7 @@ class MainCommands:
         self.server_commands = ServerCommands(executor)
         self.session_commands = SessionCommands(executor)
         self.admin_commands = AdminCommands()
+        self.executor = executor
 
     # Команды для кластеров
     def show_cluster_list(self):

@@ -22,11 +22,15 @@ class LocalExecutor(BaseExecutor):
             raise FileNotFoundError(f"Не найдено версий 1С в директории {PATH_1C}")
 
         versions.sort(key=lambda v: list(map(int, v.split("."))), reverse=True)
-        rac_path = os.path.join(PATH_1C, versions[0], "rac")
+        self.version = versions[0]
+        rac_path = os.path.join(PATH_1C, self.version, "rac")
 
         if not os.path.exists(rac_path):
             raise FileNotFoundError(f"'rac' не найден по пути: {rac_path}")
         return rac_path
+
+    def get_rac_version(self):
+        return self.version
 
     def run_command(self, rac_args, ras_address=""):
         """

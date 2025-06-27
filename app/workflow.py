@@ -53,6 +53,11 @@ def local_workflow():
 
 def _run_menu(commands, mode_name):
     """Запускает интерактивное меню с управлением стрелками и Enter."""
+
+    rac_version = None
+    if hasattr(commands.executor, "get_rac_version"):
+        rac_version = commands.executor.get_rac_version()
+
     actions = (
         "Список кластеров",
         "Список информационных баз",
@@ -75,7 +80,8 @@ def _run_menu(commands, mode_name):
     )
 
     while True:
-        choice = menu_with_arrows(f"Меню ({mode_name} режим", actions)
+        menu_title = f"Меню ({mode_name} режим) | Версия 1С: {rac_version if rac_version else 'неизвестна'}"
+        choice = menu_with_arrows(menu_title, actions)
 
         match choice:
             case 0:
