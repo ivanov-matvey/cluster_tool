@@ -259,11 +259,19 @@ def menu_with_arrows(title, options):
         for i, option in enumerate(options):
             prefix = "➤" if i == selected else " "
             if isinstance(option, (list, tuple)):
-                first, *rest = option
-                rest_str = " — ".join(map(str, rest))
-                print(f"{prefix} {first}. {rest_str}")
+                index_str = option[0]
+
+                display_items = list(option[1:])
+                if len(display_items) >= 3 and isinstance(display_items[2], str):
+                    name = display_items[2]
+                    port = display_items[1]
+                    print(f"{prefix} {index_str}. {name} — {port}")
+                else:
+                    rest = " — ".join(str(x) for x in display_items if x not in ("", None))
+                    print(f"{prefix} {index_str}. {rest}")
             else:
                 print(f"{prefix} {option}")
+
         print_info("Навигация: стрелки ↑↓, Enter — выбрать, Backspace — назад")
 
         key = _get_key()

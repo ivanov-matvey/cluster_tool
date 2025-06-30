@@ -10,8 +10,16 @@ class ClusterManager:
 
     def get_cluster_list_parsed(self):
         """Возвращает обработанный список кластеров."""
-        out, _ = self.executor.run_command("cluster list")
-        return self.executor.parse_cluster(out)
+        raw_output, err = self.executor.run_command("cluster list")
+        if err:
+            return []
+
+        clusters = self.executor.parse_cluster(raw_output)
+        result = []
+        for uuid, name in clusters:
+            port = self.executor._get_cluster_port(uuid)
+            result.append((uuid, name, port))
+        return result
 
     def get_cluster_list(self):
         """Возвращает сырой список кластеров."""

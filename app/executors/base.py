@@ -63,6 +63,15 @@ class BaseExecutor(ABC):
             required_fields=["uuid", "name", "lifetime"],
         )
 
+    def _get_cluster_port(self, uuid):
+        out, _ = self.run_command(f"cluster info --cluster={uuid}")
+        for line in out.splitlines():
+            line = line.strip()
+            if line.lower().startswith("port") and ':' in line:
+                port = line.split(":", 1)[1].strip()
+                return port
+        return "неизвестно"
+
     def parse_infobase(self, rac_output):
         """Разбирает вывод "rac infobase summary list" и возвращает (uuid, name)."""
         return self.parse_kv_blocks(
