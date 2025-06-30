@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from ..managers.admin import AdminManager
-from ..ui.common import print_output, get_string, get_password
+from ..ui.common import print_output, get_string, get_password, print_error
 
 
 class AdminCommands:
@@ -20,11 +20,22 @@ class AdminCommands:
 
     def update_admin_information(self):
         username = get_string("Введите логин")
-        password = get_password("Введите пароль")
+
+        password = ""
+        password_confirmed = False
+        while not password_confirmed:
+            password = get_password("Введите пароль")
+            password_confirm = get_password("Подтвердите пароль")
+            if password == password_confirm:
+                password_confirmed = True
+            else:
+                print_error("Пароли должны совпадать")
+
         err = None
         try:
             self.manager.update_admin_information(username, password)
         except Exception as e:
             err = str(e)
+
         out = self.manager.get_admin_information()
         print_output(out, err, "Обновление администратора кластеров")

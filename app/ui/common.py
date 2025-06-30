@@ -264,7 +264,7 @@ def menu_with_arrows(title, options):
                 print(f"{prefix} {first}. {rest_str}")
             else:
                 print(f"{prefix} {option}")
-        print("\nНавигация: стрелки ↑↓, Enter — выбрать, Backspace — назад")
+        print_info("Навигация: стрелки ↑↓, Enter — выбрать, Backspace — назад")
 
         key = _get_key()
 
@@ -293,8 +293,8 @@ def menu_with_arrows_multiple(title, options):
                 print(f"{prefix} {is_selected} {first}. {rest_str}")
             else:
                 print(f"{prefix} {is_selected} {option}")
-        print("\nНавигация: стрелки ↑↓, Пробел — выбрать, A/D — выбрать/снять все,\n"
-              "Enter — подтвердить выбор, Backspace — назад")
+        print_info("Навигация: стрелки ↑↓, Пробел — выбрать, A/D — выбрать/снять все,\n"
+                   "Enter — подтвердить выбор, Backspace — назад")
 
         key = _get_key()
 
