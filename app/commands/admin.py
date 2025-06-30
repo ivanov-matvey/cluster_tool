@@ -37,5 +37,5 @@ class AdminCommands:
         except Exception as e:
             err = str(e)
 
-        out = self.manager.get_admin_information()
-        print_output(out, err, "Обновление администратора кластеров")
+        result = f"Администратор обновлён: {username}"
+        print_output(result, err, "Обновление администратора кластеров")
