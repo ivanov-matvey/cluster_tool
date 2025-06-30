@@ -8,7 +8,7 @@ class SessionManager:
 
     def __init__(self, executor):
         self.executor = executor
-        admin_manager = AdminManager()
+        admin_manager = AdminManager(executor)
         user, pwd = admin_manager.get_admin_information()
         print(user, pwd)
         self.auth_string = f"--cluster-user={user} --cluster-pwd={pwd}"

@@ -72,7 +72,7 @@ def _run_menu(commands, mode_name):
         "Удалить информационную базу",
         "Обновить период перезапуска рабочих сеансов",
         "Завершить сеанс",
-        "Информация об аккаунте администратора кластеров",
+        "Список администраторов",
         "Обновить аккаунт администратора кластеров",
         "Тест множественный выбор",
         "Топ по сессиям",
@@ -111,7 +111,8 @@ def _run_menu(commands, mode_name):
             case 12:
                 commands.delete_session()
             case 13:
-                commands.show_admin_information()
+                # commands.show_admin_information()
+                commands.show_admin_list()
             case 14:
                 commands.update_admin_information()
             case 15:

@@ -19,7 +19,7 @@ class MainCommands:
         self.process_commands = ProcessCommands(executor)
         self.server_commands = ServerCommands(executor)
         self.session_commands = SessionCommands(executor)
-        self.admin_commands = AdminCommands()
+        self.admin_commands = AdminCommands(executor)
         self.executor = executor
 
     # Команды для кластеров
@@ -92,6 +92,10 @@ class MainCommands:
     def show_admin_information(self):
         """Выводит информацию об администраторе кластеров."""
         self.admin_commands.show_admin_information()
+
+    def show_admin_list(self):
+        """Выводит список администраторов кластеров."""
+        self.admin_commands.show_admin_list()
 
     def update_admin_information(self):
         """Обновляет информацию об администраторе кластеров."""

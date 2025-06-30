@@ -19,9 +19,13 @@ def _load_or_generate_key():
 
 
 class AdminManager:
-    def __init__(self):
+    def __init__(self, executor):
+        self.executor = executor
         self.key = _load_or_generate_key()
         self.cipher = Fernet(self.key)
+        user, pwd = self.get_admin_information()
+        print(user, pwd)
+        self.auth_string = f"--cluster-user={user} --cluster-pwd={pwd}"
 
     def update_admin_information(self, username, password):
         """Создаёт или обновляет администратора, записывая логин и зашифрованный пароль."""
@@ -32,6 +36,14 @@ class AdminManager:
         }
         with open(CREDENTIALS_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
+
+
+    def get_admin_list(self, cluster_uuid):
+        """Возвращает сырой список администраторов."""
+        out, err = self.executor.run_command(
+            f"cluster admin list --cluster={cluster_uuid} {self.auth_string}"
+        )
+        return out, err
 
 
     def get_admin_information(self):

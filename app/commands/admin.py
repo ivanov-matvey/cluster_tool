@@ -2,21 +2,37 @@
 # -*- coding: utf-8 -*-
 
 from ..managers.admin import AdminManager
-from ..ui.common import print_output, get_string, get_password, print_error
+from ..managers.cluster import ClusterManager
+from ..ui.common import print_output, get_string, get_password, print_error, \
+    select_from_list
 
 
 class AdminCommands:
     """Команды для работы с админом."""
 
-    def __init__(self):
-        self.manager = AdminManager()
+    def __init__(self, executor):
+        self.admin_manager = AdminManager(executor)
+        self.cluster_manager = ClusterManager(executor)
 
     def show_admin_information(self):
-        out = self.manager.get_admin_information()
+        out = self.admin_manager.get_admin_information()
         err = None
         if out is None:
             err = "Администратор не зарегистрирован."
         print_output(out, err, "Администратор кластеров")
+
+
+    def show_admin_list(self):
+        """Получает сырой список администраторов и вызывает его вывод."""
+        clusters = self.cluster_manager.get_cluster_list_parsed()
+        cluster = select_from_list(clusters, "cluster")
+        if not cluster:
+            return
+
+        cluster_uuid = cluster[0]
+        out, err = self.admin_manager.get_admin_list(cluster_uuid)
+        print_output(out, err, "Список администраторов")
+
 
     def update_admin_information(self):
         username = get_string("Введите логин")
@@ -33,7 +49,7 @@ class AdminCommands:
 
         err = None
         try:
-            self.manager.update_admin_information(username, password)
+            self.admin_manager.update_admin_information(username, password)
         except Exception as e:
             err = str(e)
 
