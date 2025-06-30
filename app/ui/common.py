@@ -264,7 +264,7 @@ def menu_with_arrows(title, options):
                 print(f"{prefix} {first}. {rest_str}")
             else:
                 print(f"{prefix} {option}")
-        print("\n(Навигация: стрелки ↑↓, Enter — выбрать, Backspace — назад)")
+        print("\nНавигация: стрелки ↑↓, Enter — выбрать, Backspace — назад")
 
         key = _get_key()
 
@@ -293,7 +293,8 @@ def menu_with_arrows_multiple(title, options):
                 print(f"{prefix} {is_selected} {first}. {rest_str}")
             else:
                 print(f"{prefix} {is_selected} {option}")
-        print("\n(Навигация: стрелки ↑↓, Пробел — выбрать, Enter — подтвердить выбор, Backspace — назад)")
+        print("\nНавигация: стрелки ↑↓, Пробел — выбрать, A/D — выбрать/снять все,\n"
+              "Enter — подтвердить выбор, Backspace — назад")
 
         key = _get_key()
 
@@ -301,10 +302,15 @@ def menu_with_arrows_multiple(title, options):
             selected = (selected - 1) % len(options)
         elif key in {'\x1b[B', b'P'}:  # Стрелка вниз
             selected = (selected + 1) % len(options)
-        elif (key in {'\x20', b' '}) and (selected not in selected_list):  # Пробел (поставить выделение)
-            selected_list.append(selected)
-        elif (key in {'\x20', b' '}) and (selected in selected_list):  # Пробел (снять выделение)
-            selected_list.remove(selected)
+        elif key in {'\x20', b' '}:  # Пробел выделить/снять выделение
+            if selected in selected_list:
+                selected_list.remove(selected)
+            else:
+                selected_list.append(selected)
+        elif key in {'a', b'a', 'A', b'A'}:  # Выделить всё
+            selected_list = list(range(len(options)))
+        elif key in {'d', b'd', 'D', b'D'}:  # Снять всё
+            selected_list.clear()
         elif key in {'\n', b'\r'}:  # Enter
             print(f"Выбраны пункты: {[i + 1 for i in selected_list]}")
             return selected_list
