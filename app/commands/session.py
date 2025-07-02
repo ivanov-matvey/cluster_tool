@@ -89,7 +89,7 @@ class SessionCommands:
 
         start_clusters = time.time()
         clusters = self.cluster_manager.get_cluster_list_parsed()
-        clusters = [{"uuid": uuid, "name": name} for uuid, name in clusters]
+        clusters = [{"uuid": uuid, "name": name, "port": port} for uuid, name, port in clusters]
 
         elapsed_clusters = time.time() - start_clusters
 
@@ -104,8 +104,8 @@ class SessionCommands:
         sorted_clusters = sorted(clusters, key=lambda c: c["sessions"], reverse=True)
 
         for cluster in sorted_clusters:
-            print(f"{cluster['name']} ({cluster['uuid']}): {cluster['sessions']} сессий")
+            print(f"{cluster['name']} ({cluster['port']}): {cluster['sessions']} сессий")
 
-        print(f"\n⏱ Время получения кластеров: {elapsed_clusters:.2f} сек.")
-        print(f"⏱ Время подсчёта сессий: {elapsed_sessions:.2f} сек.")
-        print(f"⏱ Общее время: {elapsed_total:.2f} сек.")
+        print(f"\nВремя получения кластеров: {elapsed_clusters:.2f} сек.")
+        print(f"Время подсчёта сессий: {elapsed_sessions:.2f} сек.")
+        print(f"Общее время: {elapsed_total:.2f} сек.")
