@@ -32,7 +32,7 @@ class ClusterManager:
         return self.executor.parse_cluster_with_lifetime(out)
 
     def update_session_lifetime(self, cluster_uuid, lifetime):
-        """Обновляет период перезапуска рабочих сеансов"""
+        """Обновляет период перезапуска рабочих процессов"""
         self.executor.run_command(
             f"cluster update --cluster={cluster_uuid} --lifetime-limit={lifetime}"
         )
