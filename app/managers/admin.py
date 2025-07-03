@@ -50,7 +50,7 @@ class AdminManager:
     def get_admin_information(self):
         """Читает данные из файла, расшифровывает пароль и возвращает (username, password)."""
         if not os.path.exists(CREDENTIALS_FILE):
-            return None
+            return "", ""
         with open(CREDENTIALS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
 
