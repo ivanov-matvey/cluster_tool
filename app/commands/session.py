@@ -4,7 +4,7 @@
 import time
 from ..managers.cluster import ClusterManager
 from ..managers.session import SessionManager
-from ..ui.common import select_from_list, print_output
+from ..ui.common import select_from_list, print_output, print_center_text
 
 
 class SessionCommands:
@@ -83,7 +83,7 @@ class SessionCommands:
 
     def show_session_top(self):
         """Показывает отсортированный список кластеров по количеству сессий."""
-        print("\n=== Топ кластеров по количеству сессий ===\n")
+        print_center_text("Топ кластеров по количеству сессий")
 
         start_total = time.time()
 

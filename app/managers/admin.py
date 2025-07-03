@@ -30,8 +30,9 @@ class AdminManager:
     def update_admin_information(self, username, password):
         """Создаёт или обновляет администратора, записывая логин и зашифрованный пароль."""
         encrypted_password = self.cipher.encrypt(password.encode()).decode("utf-8")
+        encrypted_username = self.cipher.encrypt(username.encode()).decode("utf-8")
         data = {
-            "username": username,
+            "username": encrypted_username,
             "password": encrypted_password
         }
         with open(CREDENTIALS_FILE, "w", encoding="utf-8") as f:
@@ -53,12 +54,13 @@ class AdminManager:
         with open(CREDENTIALS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        username = data.get("username")
+        encrypted_username = data.get("username")
         encrypted_password = data.get("password")
 
-        if not username or not encrypted_password:
+        if not encrypted_username or not encrypted_password:
             return None
 
+        encrypted_username = self.cipher.decrypt(encrypted_username.encode()).decode("utf-8")
         decrypted_password = self.cipher.decrypt(encrypted_password.encode()).decode("utf-8")
 
-        return username, decrypted_password
+        return encrypted_username, decrypted_password
