@@ -74,6 +74,7 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
 # 2. Запустите главное меню
-python -m app
+cd ..
+python -m cluster_tool
 ```
 
